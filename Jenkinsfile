@@ -22,6 +22,7 @@ node{
    sh "docker login -u balasubramaniyand -p ${dockerPassword}"
     }
    sh 'docker push balasubramaniyand/myweb:0.0.2'
+	  
 	   
    }
    stage('Nexus Image Push'){
