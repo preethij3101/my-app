@@ -8,12 +8,14 @@ node{
       sh "${mvnHome}/bin/mvn clean package"                
 	  sh 'mv target/myweb*.war target/newapp.war'
    }
-   stage('SonarQube Analysis') {
-	        def mvnHome =  tool name: 'maven3', type: 'maven'
-	        withSonarQubeEnv('sonar') { 
-	          sh "${mvnHome}/bin/mvn sonar:sonar"
-	        }
-	    }
+   stage('Nexus Image Push'){
+   withCredentials([string(credentialsId: 'nexus', variable: 'nexusPassword')]) {
+   sh "docker login -u admin -p ${nexuspassword} 54.151.241.253:8083"
+    }
+	sh "docker tag balasubramaniyand/myweb:0.0.2 54.151.241.253:8083/priyaa:0.0.1"
+   sh 'docker push 54.151.241.253:8083/priyaa:0.0.1' 
+    }
+		   
     stage('Build Docker Image'){
    sh 'docker build -t balasubramaniyand/myweb:0.0.2 .'
    }
